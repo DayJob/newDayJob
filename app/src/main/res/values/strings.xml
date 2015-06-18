@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">DayJob</string>
+    <string name="title_activity_main">구직메뉴</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="next">Next</string>
+    <string name="title_activity_sub">구인메뉴</string>
+    <string name="title_activity_addMap">위치선택</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string-array name="tabs">
+        <item>지도보기</item>
+        <item>목록보기</item>
+        <item>신청목록</item>
+    </string-array>
+    <string-array name="hireTabs">
+        <item>등록위치선택</item>
+        <item>내게시물</item>
+    </string-array>
+    <string-array name="category">
+        <item>전체보기</item>
+        <item>수리</item>
+        <item>청소</item>
+        <item>단순노동</item>
+        <item>노가다</item>
+        <item>배달</item>
+        <item>음식</item>
+        <item>전단지</item>
+        <item>과외</item>
+        <item>요가</item>
+    </string-array>
+    <string-array name="categoryText">
+        <item>수리</item>
+        <item>청소</item>
+        <item>단순노동</item>
+        <item>노가다</item>
+        <item>배달</item>
+        <item>음식</item>
+        <item>전단지</item>
+        <item>과외</item>
+        <item>요가</item>
+    </string-array>
+    <string-array name="categoryImage">
+        <item>fix</item>
+        <item>clean</item>
+        <item>work</item>
+        <item>hardwork</item>
+        <item>bike</item>
+        <item>food</item>
+        <item>poster</item>
+        <item>teacher</item>
+        <item>yoga</item>
+    </string-array>
+    <string-array name="filter">
+        <item>거리순</item>
+        <item>최신순</item>
+        <item>보수순</item>
+    </string-array>
+    <string-array name="sex">
+        <item>남자</item>
+        <item>여자</item>
+    </string-array>
+
+    <string name="title_activity_login">로그인하기</string>
+    <string name="title_activity_task_apply_status">신청현황</string>
+    <string name="title_activity_add_task">등록화면</string>
+    <string name="title_activity_task_apply">신청화면</string>
+    <string name="title_activity_home">데이잡</string>
+    <string name="title_activity_signup">회원가입하기</string>
+</resources>
