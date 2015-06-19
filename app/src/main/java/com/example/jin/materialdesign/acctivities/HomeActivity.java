@@ -67,13 +67,13 @@ public class HomeActivity extends ActionBarActivity {
     public void mOnClick(View v) {
         switch (v.getId()) {
             case R.id.button:
-                Intent main = new Intent(this, SubActivity.class);
+                Intent main = new Intent(this, MainActivity.class);
                 main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(main);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
                 break;
             case R.id.button2:
-                Intent sub = new Intent(this, MainActivity.class);
+                Intent sub = new Intent(this, SubActivity.class);
                 sub.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(sub);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.hold);

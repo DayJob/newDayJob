@@ -89,8 +89,8 @@ public class NavigationDrawerFragment extends Fragment implements RecyclerAdapte
 
     public static List<Information> getData() {
         List<Information> data = new ArrayList<>();
-        int[] icons = {R.drawable.ic_assignment_ind_white_18dp, R.drawable.ic_assignment_white_18dp, R.drawable.ic_person_white_18dp, R.drawable.ic_person_outline_white_18dp};
-        String[] titles = {"구인메뉴", "구직메뉴", "구인후기", "구직후기"};
+        int[] icons = {R.drawable.ic_assignment_white_18dp, R.drawable.ic_assignment_ind_white_18dp, R.drawable.ic_person_white_18dp, R.drawable.ic_person_outline_white_18dp};
+        String[] titles = {"구직메뉴", "구인메뉴", "구인후기", "구직후기"};
         for (int i = 0; i < titles.length; i++) {
             Information current = new Information();
 
@@ -165,23 +165,23 @@ public class NavigationDrawerFragment extends Fragment implements RecyclerAdapte
 
         switch (position){
             case 0:
-                if(getActivity().getTitle().equals("구인메뉴")){
-
+                if(getActivity().getTitle().equals("구직메뉴")){
+                    Toast.makeText(getActivity(), "현재 페이지 입니다.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent sub = new Intent(getActivity(), SubActivity.class);
-                    sub.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(sub);
+                    Intent main = new Intent(getActivity(), MainActivity.class);
+                    main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(main);
 
                     getActivity().finish();
                 }
                 break;
             case 1:
-                if(getActivity().getTitle().equals("구직메뉴")){
-
+                if(getActivity().getTitle().equals("구인메뉴")){
+                    Toast.makeText(getActivity(), "현재 페이지 입니다.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent main = new Intent(getActivity(), MainActivity.class);
-                    main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(main);
+                    Intent sub = new Intent(getActivity(), SubActivity.class);
+                    sub.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(sub);
 
                     getActivity().finish();
                 }
