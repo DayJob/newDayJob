@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jin.materialdesign.acctivities.MainActivity;
+import com.example.jin.materialdesign.acctivities.auth.UserInfoManageActivity;
 import com.example.jin.materialdesign.models.Information;
 import com.example.jin.materialdesign.R;
 import com.example.jin.materialdesign.adapters.RecyclerAdapter;
@@ -70,7 +71,11 @@ public class NavigationDrawerFragment extends Fragment implements RecyclerAdapte
         ((LinearLayout)layout.findViewById(R.id.containerDrawerImage)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), UserInfoManageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
 
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
             }
         });
 

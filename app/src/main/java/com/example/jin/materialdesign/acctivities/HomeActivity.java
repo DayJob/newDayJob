@@ -14,11 +14,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.jin.materialdesign.R;
 import com.example.jin.materialdesign.acctivities.auth.LoginActivity;
 import com.example.jin.materialdesign.acctivities.auth.SignupActivity;
+import com.example.jin.materialdesign.acctivities.auth.UserInfoManageActivity;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,6 +36,7 @@ public class HomeActivity extends ActionBarActivity {
     private Geocoder mCoder;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+    private Button btn1, btn2, btn3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,21 +50,39 @@ public class HomeActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         setTitle("");
         setCurrentLocation();
+
+        btn1 = (Button) findViewById(R.id.button);
+        btn2 = (Button) findViewById(R.id.button2);
+        btn3 = (Button) findViewById(R.id.login);
+
+        if (!pref.getBoolean("is_logged_in", false)) {
+            btn1.setVisibility(View.GONE);
+            btn2.setVisibility(View.GONE);
+        } else {
+            btn3.setVisibility(View.GONE);
+        }
+
     }
 
     public void mOnClick(View v) {
         switch (v.getId()) {
             case R.id.button:
-
-                if (pref.getBoolean("is_logged_in", false)) {
-                    Intent intent = new Intent(this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
-                } else {
-                    Toast.makeText(this, "로그인을 먼저 하세요..", Toast.LENGTH_LONG).show();
-
-                }
+                Intent main = new Intent(this, SubActivity.class);
+                main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(main);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
+                break;
+            case R.id.button2:
+                Intent sub = new Intent(this, MainActivity.class);
+                sub.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(sub);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
+                break;
+            case R.id.login:
+                Intent login = new Intent(this, LoginActivity.class);
+                login.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(login);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
                 break;
         }
     }
@@ -69,7 +90,7 @@ public class HomeActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
         if (pref.getBoolean("is_logged_in", false)) {
             MenuItem item = menu.findItem(R.id.login);
@@ -83,6 +104,8 @@ public class HomeActivity extends ActionBarActivity {
         } else {
             MenuItem item = menu.findItem(R.id.logout);
             item.setVisible(false);
+            MenuItem item3 = menu.findItem(R.id.userInfo);
+            item3.setVisible(false);
             this.invalidateOptionsMenu();
 
             MenuItem username = menu.findItem(R.id.username);
@@ -104,6 +127,7 @@ public class HomeActivity extends ActionBarActivity {
             editor.putBoolean("is_logged_in", false);
             editor.commit();
 
+            recreate();
             Toast.makeText(this, "로그아웃", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -118,6 +142,14 @@ public class HomeActivity extends ActionBarActivity {
 
         if (id == R.id.signUp) {
             Intent intent = new Intent(this, SignupActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+
+            overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
+        }
+
+        if (id == R.id.userInfo) {
+            Intent intent = new Intent(this, UserInfoManageActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
 

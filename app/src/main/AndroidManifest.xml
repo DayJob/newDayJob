@@ -37,7 +37,6 @@
         <activity
             android:name=".acctivities.minor.ShowLocationActivity"
             android:label="@string/title_activity_addMap" >
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".acctivities.SubActivity" />
@@ -82,6 +81,10 @@
         <activity
             android:name=".acctivities.auth.SignupActivity"
             android:label="@string/title_activity_signup" >
+        </activity>
+        <activity
+            android:name=".acctivities.auth.UserInfoManageActivity"
+            android:label="@string/title_activity_user_info_manage" >
         </activity>
     </application>
 

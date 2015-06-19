@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.jin.materialdesign.R;
 import com.example.jin.materialdesign.acctivities.auth.LoginActivity;
+import com.example.jin.materialdesign.acctivities.auth.UserInfoManageActivity;
 import com.example.jin.materialdesign.fragments.AddTaskMapFragment;
 import com.example.jin.materialdesign.fragments.MyTaskListFragment;
 import com.example.jin.materialdesign.fragments.NavigationDrawerFragment;
@@ -151,6 +152,8 @@ public class SubActivity extends ActionBarActivity implements MaterialTabListene
         if(pref.getBoolean("is_logged_in", false)){
             MenuItem item = menu.findItem(R.id.login);
             item.setVisible(false);
+            MenuItem item2 = menu.findItem(R.id.signUp);
+            item2.setVisible(false);
             this.invalidateOptionsMenu();
 
             MenuItem username = menu.findItem(R.id.username);
@@ -158,6 +161,8 @@ public class SubActivity extends ActionBarActivity implements MaterialTabListene
         } else {
             MenuItem item = menu.findItem(R.id.logout);
             item.setVisible(false);
+            MenuItem item3 = menu.findItem(R.id.userInfo);
+            item3.setVisible(false);
             this.invalidateOptionsMenu();
 
             MenuItem username = menu.findItem(R.id.username);
@@ -189,6 +194,14 @@ public class SubActivity extends ActionBarActivity implements MaterialTabListene
 
         if (id == R.id.login) {
             Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+
+            overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
+        }
+
+        if (id == R.id.userInfo) {
+            Intent intent = new Intent(this, UserInfoManageActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
 

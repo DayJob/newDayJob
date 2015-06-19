@@ -105,13 +105,13 @@ public class SignupActivity extends ActionBarActivity {
                 warning.setVisibility(View.INVISIBLE);
                 isIdUeable = true;
 
-                    for (int i = 0; i < alist.size(); i++) {
-                        if (usernameEdit.getText().toString().equals(alist.get(i))) {
-                            warning.setVisibility(View.VISIBLE);
-                            isIdUeable = false;
-                            break;
-                        }
+                for (int i = 0; i < alist.size(); i++) {
+                    if (usernameEdit.getText().toString().equals(alist.get(i))) {
+                        warning.setVisibility(View.VISIBLE);
+                        isIdUeable = false;
+                        break;
                     }
+                }
             }
         });
 
@@ -198,9 +198,7 @@ public class SignupActivity extends ActionBarActivity {
                         btn2.setText(showFormat.format(myCalendar.getTime()));
                         birth = saveFormat.format(myCalendar.getTime());
                     }
-                }, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                },1990, 0, 1).show();
                 break;
         }
     }
@@ -262,10 +260,12 @@ public class SignupActivity extends ActionBarActivity {
                 SharedPreferences pref = getSharedPreferences("pref",
                         MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putString("username",
-                        username);
-                editor.putBoolean("is_logged_in",
-                        true);
+                editor.putString("username", username);
+                editor.putString("phone", phone);
+                editor.putString("myAddress", address);
+                editor.putString("sex", sex);
+                editor.putString("birth", birth);
+                editor.putBoolean("is_logged_in", true);
                 editor.commit();
 
                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);

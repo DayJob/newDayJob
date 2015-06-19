@@ -8,14 +8,16 @@ public class User {
     String name;
     String address;
     String phone;
-    String datetime;
+    String sex;
+    String birth;
 
-    public User(int id, String name, String address, String phone, String datetime) {
+    public User(int id, String name, String address, String phone, String sex, String birth) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.phone = phone;
-        this.datetime = datetime;
+        this.sex = sex;
+        this.birth = birth;
     }
 
     public int getId() {
@@ -50,11 +52,19 @@ public class User {
         this.phone = phone;
     }
 
-    public String getDatetime() {
-        return datetime;
+    public String getSex() {
+        return sex;
     }
 
-    public void setDatetime(String datetime) {
-        this.datetime = datetime;
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getBirth() {
+        return birth;
+    }
+
+    public void setBirth(String birth) {
+        this.birth = birth;
     }
 }

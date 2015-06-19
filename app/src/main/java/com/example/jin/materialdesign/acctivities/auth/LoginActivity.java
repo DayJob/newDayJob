@@ -18,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.jin.materialdesign.acctivities.HomeActivity;
 import com.example.jin.materialdesign.acctivities.MainActivity;
 import com.example.jin.materialdesign.R;
 import com.example.jin.materialdesign.network.VolleySingleton;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 public class LoginActivity extends ActionBarActivity {
 
-    private String username, password;
+    private String username, password, message;
     private EditText et1, et2;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -72,7 +73,7 @@ public class LoginActivity extends ActionBarActivity {
                 username = et1.getText().toString();
                 password = et2.getText().toString();
 
-                if (username.equals("") || password.equals("")){
+                if (username.equals("") || password.equals("")) {
 
                     Toast.makeText(this, "양식을 모두 채워주세요", Toast.LENGTH_SHORT).show();
 
@@ -100,9 +101,19 @@ public class LoginActivity extends ActionBarActivity {
                         JSONObject loginInfo = ja.getJSONObject(i);
                         editor.putString("username",
                                 loginInfo.getString("name"));
+                        editor.putString("phone",
+                                loginInfo.getString("phone"));
+                        editor.putString("myAddress",
+                                loginInfo.getString("address"));
+                        editor.putString("sex",
+                                loginInfo.getString("sex"));
+                        editor.putString("birth",
+                                loginInfo.getString("birth"));
                         editor.putBoolean("is_logged_in",
                                 loginInfo.getBoolean("is_logged_in"));
                         editor.commit();
+
+                        message = loginInfo.getString("message");
                     }
 
                 } catch (JSONException e) {
@@ -110,16 +121,24 @@ public class LoginActivity extends ActionBarActivity {
                 }
 
                 if (pref.getBoolean("is_logged_in", false)) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
                     finish();
                 } else {
-                    editor.putString("username","");
+                    editor.putString("username", "");
                     editor.commit();
-                    Toast.makeText(LoginActivity.this, "로그인 실패, 아이디나 패스워드가 틀립니다.", Toast.LENGTH_SHORT).show();
+
+                    if (message.equals("wrong password")) {
+                        Toast.makeText(LoginActivity.this, "로그인 실패, 패스워드가 틀립니다.", Toast.LENGTH_SHORT).show();
+                    } else if (message.equals("wrong name")) {
+                        Toast.makeText(LoginActivity.this, "로그인 실패, 아이디가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "로그인 실패, 아이디나 패스워드가 틀립니다.", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
         }, new Response.ErrorListener() {
@@ -128,7 +147,7 @@ public class LoginActivity extends ActionBarActivity {
                 Toast.makeText(LoginActivity.this, "서버와 통신할수 없습니다. 인터넷 연결상태를 확인해주세요.", Toast.LENGTH_SHORT).show();
                 Log.d("MYTAG", error.getMessage());
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
@@ -139,8 +158,8 @@ public class LoginActivity extends ActionBarActivity {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<String, String>();
-                headers.put("Content-Type","application/x-www-form-urlencoded");
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/x-www-form-urlencoded");
                 headers.put("abc", "value");
                 return headers;
             }
@@ -164,7 +183,7 @@ public class LoginActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == android.R.id.home){
+        if (id == android.R.id.home) {
             finish();
             return true;
         }

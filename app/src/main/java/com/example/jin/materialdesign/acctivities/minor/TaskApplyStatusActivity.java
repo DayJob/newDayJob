@@ -140,7 +140,7 @@ public class TaskApplyStatusActivity extends ActionBarActivity implements UserLi
 
                     for (int i = 0; i < ja.length(); i++) {
                         JSONObject data = ja.getJSONObject(i);
-                        alist.add(new User(data.getInt("id"), data.getString("user_name"), data.getString("address"), data.getString("phone"), data.getString("create_at")));
+                        alist.add(new User(data.getInt("id"), data.getString("user_name"), data.getString("address"), data.getString("phone"), data.getString("sex"), data.getString("birth")));
                     }
 
                     adapter.setTaskList(alist);

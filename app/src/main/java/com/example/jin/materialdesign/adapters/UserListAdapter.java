@@ -11,7 +11,11 @@ import android.widget.TextView;
 import com.example.jin.materialdesign.R;
 import com.example.jin.materialdesign.models.User;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by Jin on 2015-06-15.
@@ -67,7 +71,18 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
         holder.textView1.setText(currentUser.getName());
         holder.textView2.setText(currentUser.getAddress());
         holder.textView3.setText(currentUser.getPhone());
-        holder.textView4.setText(currentUser.getDatetime());
+        holder.textView4.setText(currentUser.getSex());
+
+        Calendar myCalendar = Calendar.getInstance();
+        SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+        SimpleDateFormat showFormat = new SimpleDateFormat("yyyy년생", Locale.KOREA);
+
+        try {
+            holder.textView5.setText(showFormat.format(parseFormat.parse(currentUser.getBirth())));
+        } catch (ParseException e) {
+
+        }
+
 
     }
 
@@ -87,6 +102,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
         TextView textView2;
         TextView textView3;
         TextView textView4;
+        TextView textView5;
         ImageButton locationBtn;
 
         public UserListViewHolder(View itemView) {
@@ -95,6 +111,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
             textView2 = (TextView) itemView.findViewById(R.id.textView2);
             textView3 = (TextView) itemView.findViewById(R.id.textView3);
             textView4 = (TextView) itemView.findViewById(R.id.textView4);
+            textView5 = (TextView) itemView.findViewById(R.id.textView5);
 
             itemView.setOnClickListener(this);
 

@@ -11,6 +11,7 @@ import android.location.Geocoder;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,14 +45,14 @@ import java.util.Map;
 public class AddTaskActivity extends ActionBarActivity {
 
     private Intent intent;
-    private EditText locationText;
-    private Button categoryButton, dateButton, timeButton;
+    private EditText locationText, dateText, timeText, phoneText, categoryButton;
     String username, pay, description, location, date, time, phone, category, latitude, longitude, image_name;
     private Geocoder mCoder;
     private List<Address> addr;
     private Calendar myCalendar;
     DatePickerDialog.OnDateSetListener datePicker;
     private TimePickerDialog.OnTimeSetListener timePicker;
+    private SharedPreferences pref;
 
     @Override
     public void finish() {
@@ -65,6 +66,7 @@ public class AddTaskActivity extends ActionBarActivity {
         setContentView(R.layout.activity_add_task);
 
         intent = getIntent();
+        pref = getSharedPreferences("pref", MODE_PRIVATE);
         mCoder = new Geocoder(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -78,8 +80,50 @@ public class AddTaskActivity extends ActionBarActivity {
 
         locationText = (EditText) findViewById(R.id.editText3);
 
-        dateButton = (Button) findViewById(R.id.date);
-        timeButton = (Button) findViewById(R.id.time);
+        phoneText = (EditText) findViewById(R.id.editText5);
+
+
+        dateText = (EditText) findViewById(R.id.date);
+        timeText = (EditText) findViewById(R.id.time);
+        categoryButton = (EditText) findViewById(R.id.category);
+
+        dateText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    new DatePickerDialog(AddTaskActivity.this, datePicker, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
+            }
+        });
+
+        timeText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    new TimePickerDialog(AddTaskActivity.this, timePicker, myCalendar
+                            .get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), false).show();
+                }
+            }
+        });
+
+        categoryButton.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                AlertDialog alert = new AlertDialog.Builder(AddTaskActivity.this)
+                        .setTitle("카테고리 선택")
+                        .setSingleChoiceItems(R.array.categoryText, -1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                category = getResources().getStringArray(R.array.categoryText)[which];
+                                image_name = getResources().getStringArray(R.array.categoryImage)[which];
+                                categoryButton.setText(category);
+                                dialog.cancel();
+                            }
+                        }).show();
+            }
+        });
 
         myCalendar = Calendar.getInstance();
 
@@ -110,7 +154,7 @@ public class AddTaskActivity extends ActionBarActivity {
                 String save = "kk:mm:ss"; //In which you need put here
                 SimpleDateFormat saveFormat = new SimpleDateFormat(save, Locale.KOREA);
 
-                timeButton.setText(showFormat.format(myCalendar.getTime()));
+                timeText.setText(showFormat.format(myCalendar.getTime()));
                 time = saveFormat.format(myCalendar.getTime());
             }
 
@@ -130,10 +174,18 @@ public class AddTaskActivity extends ActionBarActivity {
 
         locationText.setText(addr.get(0).getAddressLine(0));
 
-        categoryButton = (Button) findViewById(R.id.category);
+        phoneText.setText(pref.getString("phone", ""));
+        phoneText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    phoneText.setText(phoneText.getText().toString().replaceAll("\\D", ""));
+                } else {
+                    phoneText.setText(PhoneNumberUtils.formatNumber(phoneText.getText().toString()));
+                }
+            }
+        });
 
-        SharedPreferences pref = getSharedPreferences("pref",
-                MODE_PRIVATE);
         username = pref.getString("username", "");
 
     }
@@ -146,7 +198,7 @@ public class AddTaskActivity extends ActionBarActivity {
         String save = "yyyy/MM/dd"; //In which you need put here
         SimpleDateFormat saveFormat = new SimpleDateFormat(save, Locale.KOREA);
 
-        dateButton.setText(showFormat.format(myCalendar.getTime()));
+        dateText.setText(showFormat.format(myCalendar.getTime()));
         date = saveFormat.format(myCalendar.getTime());
     }
 
@@ -203,28 +255,6 @@ public class AddTaskActivity extends ActionBarActivity {
                     finish();
                 }
 
-                break;
-            case R.id.category:
-                AlertDialog alert = new AlertDialog.Builder(this)
-                        .setTitle("카테고리 선택")
-                        .setSingleChoiceItems(R.array.categoryText, -1, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                category = getResources().getStringArray(R.array.categoryText)[which];
-                                image_name = getResources().getStringArray(R.array.categoryImage)[which];
-                                categoryButton.setText(category);
-                                dialog.cancel();
-                            }
-                        }).show();
-                break;
-            case R.id.date:
-                new DatePickerDialog(AddTaskActivity.this, datePicker, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                break;
-            case R.id.time:
-                new TimePickerDialog(AddTaskActivity.this, timePicker, myCalendar
-                        .get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), false).show();
                 break;
         }
     }

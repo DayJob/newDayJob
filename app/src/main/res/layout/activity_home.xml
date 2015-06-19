@@ -37,15 +37,44 @@
         android:gravity="center">
 
         <Button
-            android:layout_margin="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start"
+            android:text="구인메뉴"
             android:textSize="16dp"
             android:textStyle="bold"
             android:textColor="@color/icons"
             android:background="@color/primary"
             android:onClick="mOnClick"
             android:id="@+id/button" />
+
+        <Button
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="구직메뉴"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/icons"
+            android:background="@color/primary"
+            android:onClick="mOnClick"
+            android:id="@+id/button2" />
+
+        <Button
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="로그인"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/icons"
+            android:background="@color/primary"
+            android:onClick="mOnClick"
+            android:id="@+id/login" />
+
     </LinearLayout>
 </LinearLayout>
