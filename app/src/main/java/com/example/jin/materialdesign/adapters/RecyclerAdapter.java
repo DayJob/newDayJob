@@ -51,14 +51,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         holder.icon.setImageResource(current.getIconId());
 
         if(activity.getTitle().equals("구인메뉴")){
-            if(position == 0){
+            if(position == 1){
                 holder.row.setBackgroundColor(activity.getResources().getColor(R.color.icons));
                 holder.title.setTextColor(activity.getResources().getColor(R.color.primary));
                 holder.icon.setColorFilter(activity.getResources().getColor(R.color.primary));
             }
         }
         if(activity.getTitle().equals("구직메뉴")){
-            if(position == 1){
+            if(position == 0){
                 holder.row.setBackgroundColor(activity.getResources().getColor(R.color.icons));
                 holder.title.setTextColor(activity.getResources().getColor(R.color.primary));
                 holder.icon.setColorFilter(activity.getResources().getColor(R.color.primary));
