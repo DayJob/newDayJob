@@ -142,7 +142,7 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
             editor.putBoolean("is_logged_in", false);
             editor.commit();
 
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
 
