@@ -121,11 +121,6 @@ public class LoginActivity extends ActionBarActivity {
                 }
 
                 if (pref.getBoolean("is_logged_in", false)) {
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
                     finish();
                 } else {
                     editor.putString("username", "");

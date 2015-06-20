@@ -55,22 +55,24 @@ public class HomeActivity extends ActionBarActivity {
         btn2 = (Button) findViewById(R.id.button2);
         btn3 = (Button) findViewById(R.id.login);
 
-        if (!pref.getBoolean("is_logged_in", false)) {
-            btn1.setVisibility(View.GONE);
-            btn2.setVisibility(View.GONE);
-        } else {
-            btn3.setVisibility(View.GONE);
-        }
+        btn2.setVisibility(View.GONE);
+        btn3.setVisibility(View.GONE);
 
     }
 
     public void mOnClick(View v) {
         switch (v.getId()) {
             case R.id.button:
-                Intent main = new Intent(this, MainActivity.class);
-                main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(main);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
+
+                if(pref.getBoolean("is_logged_in", false)){
+                    Intent main = new Intent(this, MainActivity.class);
+                    main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(main);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
+                } else {
+                    Toast.makeText(this, "로그인을 먼저 해주세요..", Toast.LENGTH_LONG).show();
+                }
+
                 break;
             case R.id.button2:
                 Intent sub = new Intent(this, SubActivity.class);
@@ -127,7 +129,6 @@ public class HomeActivity extends ActionBarActivity {
             editor.putBoolean("is_logged_in", false);
             editor.commit();
 
-            recreate();
             Toast.makeText(this, "로그아웃", Toast.LENGTH_SHORT).show();
             return true;
         }

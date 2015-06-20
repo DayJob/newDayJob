@@ -53,11 +53,16 @@ public class AddTaskActivity extends ActionBarActivity {
     DatePickerDialog.OnDateSetListener datePicker;
     private TimePickerDialog.OnTimeSetListener timePicker;
     private SharedPreferences pref;
+    private static ClickListener clickListener;
 
     @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.hold, R.anim.slide_out_left);
+    }
+
+    public void setOnClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -243,15 +248,9 @@ public class AddTaskActivity extends ActionBarActivity {
                 } else {
 
                     sendTaskData();
-
                     Toast.makeText(this, "등록했습니다. 내게시물 탭에서 확인해보세요.",
                             Toast.LENGTH_SHORT).show();
-                    ((EditText) (findViewById(R.id.editText1))).setText(pay);
-
-                    Intent main = new Intent(this, SubActivity.class);
-                    main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(main);
-
+                    clickListener.listUpdate();
                     finish();
                 }
 
@@ -302,5 +301,10 @@ public class AddTaskActivity extends ActionBarActivity {
         };
 
         requestQueue.add(request);
+
+    }
+
+    public interface ClickListener {
+        public void listUpdate();
     }
 }

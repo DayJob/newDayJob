@@ -1,5 +1,7 @@
 package com.example.jin.materialdesign.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,9 +22,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.jin.materialdesign.R;
+import com.example.jin.materialdesign.acctivities.minor.AddTaskActivity;
 import com.example.jin.materialdesign.acctivities.minor.TaskApplyActivity;
 import com.example.jin.materialdesign.models.Task;
-import com.example.jin.materialdesign.adapters.TaskListAdapter;
+import com.example.jin.materialdesign.adapters.MyTaskListAdapter;
 import com.example.jin.materialdesign.network.VolleySingleton;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
@@ -38,18 +41,17 @@ import java.util.Map;
 /**
  * Created by Jin on 2015-06-09.
  */
-public class MyTaskListFragment extends Fragment implements TaskListAdapter.ClickListener {
+public class MyTaskListFragment extends Fragment implements MyTaskListAdapter.ClickListener, AddTaskActivity.ClickListener {
 
     private RecyclerView recyclerView;
-    private TaskListAdapter adapter;
+    private MyTaskListAdapter adapter;
     private ArrayList<Task> data;
     public static final String DRAWABLES_PATH = ":drawable/";
     private MyTaskListFragment myTaskListFragment;
     private SwipyRefreshLayout swipyRefreshLayout;
     private LinearLayoutManager linearLayoutManager;
-    private int offset = 0;
-    private static final int LIMIT = 5;
-    JSONArray ja;
+    private JSONArray ja;
+    private AddTaskActivity addTaskActivity;
 
     public MyTaskListFragment getInstance() {
         if (myTaskListFragment == null) {
@@ -62,25 +64,27 @@ public class MyTaskListFragment extends Fragment implements TaskListAdapter.Clic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_my_task_list, container, false);
-        data = new ArrayList<>();
+
+        addTaskActivity = new AddTaskActivity();
+        addTaskActivity.setOnClickListener(this);
 
         swipyRefreshLayout = (SwipyRefreshLayout) layout.findViewById(R.id.swipyrefreshlayout);
         swipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection swipyRefreshLayoutDirection) {
                 setData();
-                if(ja.length()==0){
+                if (ja.length() == 0) {
                     Toast.makeText(getActivity(), "마지막 데이터 입니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.taskList);
-        adapter = new TaskListAdapter(getActivity());
+        adapter = new MyTaskListAdapter(getActivity());
         setData();
 
         adapter.setClickListener(this);
-        adapter.setTaskList(data);
+
         recyclerView.setAdapter(adapter);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -95,28 +99,28 @@ public class MyTaskListFragment extends Fragment implements TaskListAdapter.Clic
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                SharedPreferences pref = getActivity().getSharedPreferences("pref", getActivity().MODE_PRIVATE);
+                data = new ArrayList<>();
 
                 try {
                     ja = new JSONArray(response);
 
-                        for (int i = 0; i < ja.length(); i++) {
-                            JSONObject task = ja.getJSONObject(i);
-                            adapter.addItem(new Task(task.getInt("id"), task.getString("pay"), task
-                                    .getString("description"), task
-                                    .getString("location"), task.getString("date"), task.getString("time"),
-                                    task.getString("phone"),
-                                    task.getString("category"),
-                                    getResources().getIdentifier(
-                                            "com.example.jin.materialdesign" + DRAWABLES_PATH
-                                                    + task.getString("image_name"),
-                                            null, null), Double.valueOf(task
-                                    .getString("latitude")), Double
-                                    .valueOf(task.getString("longitude")),task.getString("username"), task.getString("create_at")));
+                    for (int i = 0; i < ja.length(); i++) {
+                        JSONObject task = ja.getJSONObject(i);
+                        data.add(new Task(task.getInt("id"), task.getString("pay"), task
+                                .getString("description"), task
+                                .getString("location"), task.getString("date"), task.getString("time"),
+                                task.getString("phone"),
+                                task.getString("category"),
+                                getResources().getIdentifier(
+                                        "com.example.jin.materialdesign" + DRAWABLES_PATH
+                                                + task.getString("image_name"),
+                                        null, null), Double.valueOf(task
+                                .getString("latitude")), Double
+                                .valueOf(task.getString("longitude")), task.getString("username"), task.getString("create_at")));
 
-                        }
+                    }
 
-                        offset = adapter.getItemCount();
+                    adapter.setTaskList(data);
 
                     if (swipyRefreshLayout.isRefreshing()) {
                         swipyRefreshLayout.setRefreshing(false);
@@ -138,8 +142,6 @@ public class MyTaskListFragment extends Fragment implements TaskListAdapter.Clic
                 Map<String, String> params = new HashMap<String, String>();
                 SharedPreferences pref = getActivity().getSharedPreferences("pref", getActivity().MODE_PRIVATE);
                 params.put("name", pref.getString("username", null));
-                params.put("limit", "" + LIMIT);
-                params.put("offset", "" + offset);
                 return params;
             }
         };
@@ -170,6 +172,73 @@ public class MyTaskListFragment extends Fragment implements TaskListAdapter.Clic
         startActivity(intent);
 
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
+
+    }
+
+    @Override
+    public void itemRemove(final int position) {
+        AlertDialog alert = new AlertDialog.Builder(
+                getActivity())
+                .setTitle("삭제 확인")
+                .setPositiveButton("삭제",
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteItemInDB(adapter.getItemData(position).getId());
+                                adapter.removeItem(position);
+
+                            }
+                        })
+                .setNegativeButton("취소",
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(
+                                    DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+    }
+
+    @Override
+    public void listUpdate() {
+        setData();
+    }
+
+    public void deleteItemInDB(final int id) {
+
+        String url = "http://feering.zc.bz/php/delete.php";
+
+        RequestQueue requestQueue = VolleySingleton.getsInstance().getRequestQueue();
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("MYTAG", error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", id + "");
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/x-www-form-urlencoded");
+                return headers;
+            }
+        };
+
+        requestQueue.add(request);
 
     }
 }

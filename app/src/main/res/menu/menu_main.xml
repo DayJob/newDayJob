@@ -12,12 +12,12 @@
     <item android:id="@+id/login"
         android:title="로그인"
         android:orderInCategory="200"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
 
     <item android:id="@+id/signUp"
         android:title="회원가입"
         android:orderInCategory="300"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
 
     <item android:id="@+id/userInfo"
         android:title="계정관리"

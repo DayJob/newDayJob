@@ -31,14 +31,14 @@ import java.util.Map;
 /**
  * Created by Jin on 2015-06-06.
  */
-public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskListViewHolder> {
+public class MyTaskListAdapter extends RecyclerView.Adapter<MyTaskListAdapter.TaskListViewHolder> {
 
     private final LayoutInflater layout_inflater;
     private ArrayList<Task> listTasks;
     private Context context;
     private ClickListener clickListener;
 
-    public TaskListAdapter(Context context) {
+    public MyTaskListAdapter(Context context) {
         this.layout_inflater = LayoutInflater.from(context);
         this.context = context;
         this.listTasks = new ArrayList<>();
@@ -92,39 +92,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
                 context.startActivity(intent);
             }
         });
-        holder.deleteBtn.setOnClickListener(new ImageButton.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                AlertDialog alert = new AlertDialog.Builder(
-                        context)
-                        .setTitle("삭제 확인")
-                        .setPositiveButton("삭제",
-                                new DialogInterface.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(
-                                            DialogInterface dialog,
-                                            int which) {
-                                        deleteItemInDB(listTasks.get(position).getId());
-                                        removeItem(position);
-
-                                    }
-                                })
-                        .setNegativeButton("취소",
-                                new DialogInterface.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(
-                                            DialogInterface dialog,
-                                            int which) {
-                                        dialog.dismiss();
-
-                                    }
-                                }).show();
-
-            }
-        });
 
     }
 
@@ -140,6 +107,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
     public interface ClickListener {
 
         public void itemClick(View view, int position);
+
+        public void itemRemove(int position);
     }
 
     class TaskListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -161,52 +130,25 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
             deleteBtn = (ImageButton) itemView.findViewById(R.id.deleteBtn);
 
             itemView.setOnClickListener(this);
+            deleteBtn.setOnClickListener(this);
 
         }
 
         @Override
         public void onClick(View v) {
-
-            if (clickListener != null) {
-//                context.startActivity(new Intent(context, SubActivity.class));
-                clickListener.itemClick(v, getPosition());
+            switch (v.getId()){
+                case R.id.deleteBtn:
+                   if (clickListener != null) {
+                       clickListener.itemRemove(getPosition());
+                   }
+                   break;
+               default:
+                   if (clickListener != null) {
+                       clickListener.itemClick(v, getPosition());
+                   }
+                   break;
             }
+
         }
-    }
-
-    public void deleteItemInDB(final int id) {
-
-        String url = "http://feering.zc.bz/php/delete.php";
-
-        RequestQueue requestQueue = VolleySingleton.getsInstance().getRequestQueue();
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("MYTAG", error.getMessage());
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("id", id + "");
-
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/x-www-form-urlencoded");
-                return headers;
-            }
-        };
-
-        requestQueue.add(request);
-
     }
 }

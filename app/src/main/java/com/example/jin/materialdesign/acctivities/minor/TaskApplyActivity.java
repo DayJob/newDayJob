@@ -1,5 +1,8 @@
 package com.example.jin.materialdesign.acctivities.minor;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
@@ -23,6 +26,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.jin.materialdesign.R;
+import com.example.jin.materialdesign.acctivities.MainActivity;
+import com.example.jin.materialdesign.acctivities.SubActivity;
 import com.example.jin.materialdesign.adapters.UserListAdapter;
 import com.example.jin.materialdesign.models.User;
 import com.example.jin.materialdesign.network.VolleySingleton;
@@ -55,11 +60,17 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
     private Button apply, cancel;
     private int myApplyId;
     private SharedPreferences pref;
+    private static ClickListener clickListener;
 
     @Override
     public void finish() {
         super.finish();
+        clickListener.listUpdate();
         overridePendingTransition(R.anim.hold, R.anim.slide_out_left);
+    }
+
+    public void setOnClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -146,15 +157,6 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
         apply = (Button) findViewById(R.id.apply);
         cancel = (Button) findViewById(R.id.cancel);
 
-        if (intent.getStringExtra("username").equals(pref.getString("username", ""))) {
-
-            apply.setVisibility(View.GONE);
-            cancel.setVisibility(View.GONE);
-
-        } else {
-            cancel.setVisibility(View.GONE);
-        }
-
     }
 
     public void setData() {
@@ -166,6 +168,7 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
             public void onResponse(String response) {
 
                 alist = new ArrayList<>();
+                boolean is_apply_user = false;
 
                 try {
                     ja = new JSONArray(response);
@@ -173,16 +176,21 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
                     for (int i = 0; i < ja.length(); i++) {
                         JSONObject data = ja.getJSONObject(i);
                         alist.add(new User(data.getInt("id"), data.getString("user_name"), data.getString("address"), data.getString("phone"), data.getString("sex"), data.getString("birth")));
-
                         if (pref.getString("username", "").equals(data.getString("user_name"))) {
-                            apply.setVisibility(View.GONE);
-                            cancel.setVisibility(View.VISIBLE);
-                            myApplyId = adapter.getItemCount();
+                            is_apply_user = true;
+                            myApplyId = i;
                         }
+
                     }
 
-                    adapter.setTaskList(alist);
+                    if(is_apply_user){
+                        cancel.setVisibility(View.VISIBLE);
+                    } else if(!pref.getString("username", "").equals(intent.getStringExtra("username"))){
+                        apply.setVisibility(View.VISIBLE);
+                    }
 
+
+                    adapter.setTaskList(alist);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -292,16 +300,30 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
     }
 
     public void mOnClick(View v) {
+
+        Intent main = new Intent(this, MainActivity.class);
+        main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         switch (v.getId()) {
             case R.id.back:
+
                 finish();
+
                 break;
             case R.id.apply:
                 sendApplyData();
+                Toast.makeText(this, "신청되었습니다.", Toast.LENGTH_SHORT).show();
+
                 break;
             case R.id.cancel:
                 deleteApplyData();
+                Toast.makeText(this, "취소되었습니다.", Toast.LENGTH_SHORT).show();
+
                 break;
         }
+    }
+
+    public interface ClickListener {
+        public void listUpdate();
     }
 }

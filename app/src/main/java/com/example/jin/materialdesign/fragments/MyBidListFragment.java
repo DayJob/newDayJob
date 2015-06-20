@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -37,7 +38,7 @@ import java.util.Map;
 /**
  * Created by Jin on 2015-06-09.
  */
-public class MyBidListFragment extends Fragment implements MyBidListAdapter.ClickListener{
+public class MyBidListFragment extends Fragment implements MyBidListAdapter.ClickListener, TaskApplyActivity.ClickListener {
 
     private MyBidListFragment myBidListFragment;
     private ArrayList<Task> alist;
@@ -45,8 +46,9 @@ public class MyBidListFragment extends Fragment implements MyBidListAdapter.Clic
     private MyBidListAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
     public static final String DRAWABLES_PATH = ":drawable/";
-    public JSONArray ja;
+    private JSONArray ja;
     private SwipyRefreshLayout swipyRefreshLayout;
+    private TaskApplyActivity taskApplyActivity;
 
     public MyBidListFragment getInstance() {
         if (myBidListFragment == null) {
@@ -59,6 +61,9 @@ public class MyBidListFragment extends Fragment implements MyBidListAdapter.Clic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_my_bid_list, container, false);
+
+        taskApplyActivity = new TaskApplyActivity();
+        taskApplyActivity.setOnClickListener(this);
 
         swipyRefreshLayout = (SwipyRefreshLayout) layout.findViewById(R.id.swipyrefreshlayout);
         swipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
@@ -107,7 +112,7 @@ public class MyBidListFragment extends Fragment implements MyBidListAdapter.Clic
                                                 + task.getString("image_name"),
                                         null, null), Double.valueOf(task
                                 .getString("latitude")), Double
-                                .valueOf(task.getString("longitude")),task.getString("username"), task.getString("create_at")));
+                                .valueOf(task.getString("longitude")), task.getString("username"), task.getString("create_at")));
                     }
 
                     adapter.setTaskList(alist);
@@ -142,7 +147,7 @@ public class MyBidListFragment extends Fragment implements MyBidListAdapter.Clic
 
     @Override
     public void itemClick(View view, int position) {
-        Intent intent = new Intent(getActivity(), TaskApplyActivity.class);
+        Intent intent = new Intent(getActivity(), taskApplyActivity.getClass());
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         intent.putExtra("id", String.valueOf(adapter.getItemData(position).getId()));
@@ -160,5 +165,10 @@ public class MyBidListFragment extends Fragment implements MyBidListAdapter.Clic
         startActivity(intent);
 
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.hold);
+    }
+
+    @Override
+    public void listUpdate() {
+        setData();
     }
 }

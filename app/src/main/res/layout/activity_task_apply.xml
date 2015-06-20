@@ -272,6 +272,7 @@
                 android:background="@drawable/menu_background"
                 android:onClick="mOnClick"
                 android:text="신청하기"
+                android:visibility="gone"
                 android:textColor="@drawable/white_text"
                 android:textSize="18dp" />
 
@@ -283,6 +284,7 @@
                 android:background="@drawable/list_background"
                 android:onClick="mOnClick"
                 android:text="신청취소"
+                android:visibility="gone"
                 android:textColor="@drawable/list_text_color"
                 android:textSize="18dp" />
         </LinearLayout>
