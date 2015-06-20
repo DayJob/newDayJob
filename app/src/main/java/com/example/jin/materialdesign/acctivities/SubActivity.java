@@ -187,8 +187,12 @@ public class SubActivity extends ActionBarActivity implements MaterialTabListene
             editor.putBoolean("is_logged_in", false);
             editor.commit();
 
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+
+            overridePendingTransition(R.anim.hold, R.anim.slide_out_left);
             Toast.makeText(this, "로그아웃", Toast.LENGTH_SHORT).show();
-            finish();
             return true;
         }
 
