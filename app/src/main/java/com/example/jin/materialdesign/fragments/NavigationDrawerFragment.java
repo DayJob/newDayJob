@@ -190,7 +190,5 @@ public class NavigationDrawerFragment extends Fragment implements RecyclerAdapte
                 Toast.makeText(getActivity(), "개발중인 메뉴입니다 조금만 기다려주세요!", Toast.LENGTH_SHORT).show();
                 break;
         }
-
     }
-
 }
