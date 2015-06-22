@@ -46,7 +46,7 @@ public class GcmIntentService extends IntentService {
                 String msg = intent.getStringExtra("msg");
                 // Post notification of received message.
 //            sendNotification("Received: " + extras.toString());
-                if(!msg.equals(null)){
+                if(msg != null){
                     sendNotification("" + msg);
                 }
                 Log.i("GcmIntentService", "Received: " + extras.toString());
