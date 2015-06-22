@@ -20,8 +20,8 @@
         <item>신청목록</item>
     </string-array>
     <string-array name="hireTabs">
-        <item>등록위치선택</item>
         <item>내게시물</item>
+        <item>등록위치선택</item>
     </string-array>
     <string-array name="category">
         <item>전체보기</item>
@@ -74,4 +74,5 @@
     <string name="title_activity_home">데이잡</string>
     <string name="title_activity_signup">회원가입하기</string>
     <string name="title_activity_user_info_manage">계정관리화면</string>
+    <string name="title_activity_gcm">GcmActivity</string>
 </resources>

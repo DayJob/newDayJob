@@ -1,10 +1,16 @@
 package com.example.jin.materialdesign.acctivities.auth;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,15 +24,19 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.jin.materialdesign.acctivities.HomeActivity;
-import com.example.jin.materialdesign.acctivities.MainActivity;
 import com.example.jin.materialdesign.R;
 import com.example.jin.materialdesign.network.VolleySingleton;
+import com.example.jin.materialdesign.push.PreferenceUtil;
+import com.example.jin.materialdesign.push.WakeLocker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,12 +47,16 @@ public class LoginActivity extends ActionBarActivity {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final String SENDER_ID = "819012735242";
+
+    private GoogleCloudMessaging _gcm;
+    private String _regId;
+
     @Override
     public void finish() {
-
         super.finish();
         overridePendingTransition(R.anim.hold, R.anim.slide_out_left);
-
 
     }
 
@@ -60,6 +74,12 @@ public class LoginActivity extends ActionBarActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (checkPlayServices())
+        {
+            _gcm = GoogleCloudMessaging.getInstance(this);
+
+        }
 
         et1 = (EditText) findViewById(R.id.username);
         et2 = (EditText) findViewById(R.id.password);
@@ -121,7 +141,9 @@ public class LoginActivity extends ActionBarActivity {
                 }
 
                 if (pref.getBoolean("is_logged_in", false)) {
-                    finish();
+                    Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                    registerInBackground();
+
                 } else {
                     editor.putString("username", "");
                     editor.commit();
@@ -141,6 +163,7 @@ public class LoginActivity extends ActionBarActivity {
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(LoginActivity.this, "서버와 통신할수 없습니다. 인터넷 연결상태를 확인해주세요.", Toast.LENGTH_SHORT).show();
                 Log.d("MYTAG", error.getMessage());
+                finish();
             }
         }) {
             @Override
@@ -148,6 +171,43 @@ public class LoginActivity extends ActionBarActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("name", username);
                 params.put("password", password);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/x-www-form-urlencoded");
+                headers.put("abc", "value");
+                return headers;
+            }
+        };
+
+        requestQueue.add(request);
+    }
+
+    public void update_regid() {
+        RequestQueue requestQueue = VolleySingleton.getsInstance().getRequestQueue();
+        String url = "http://feering.zc.bz/php/gcm/update_regid.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                finish();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(LoginActivity.this, "서버와 통신할수 없습니다. 인터넷 연결상태를 확인해주세요.", Toast.LENGTH_SHORT).show();
+                finish();
+                Log.d("MYTAG", error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("name", username);
+                params.put("gcm_regid", getRegistrationId());
                 return params;
             }
 
@@ -185,4 +245,144 @@ public class LoginActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+
+        // display received msg
+        String msg = intent.getStringExtra("msg");
+        Log.i("GcmActivity", "|" + msg + "|");
+    }
+
+    // google play service가 사용가능한가
+    private boolean checkPlayServices()
+    {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS)
+        {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
+            {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            }
+            else
+            {
+                Log.i("GcmActivity", "|This device is not supported.|");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    // registration  id를 가져온다.
+    private String getRegistrationId()
+    {
+        String registrationId = PreferenceUtil.instance(getApplicationContext()).regId();
+        if (TextUtils.isEmpty(registrationId))
+        {
+            Log.i("GcmActivity", "|Registration not found.|");
+            return "";
+        }
+        int registeredVersion = PreferenceUtil.instance(getApplicationContext()).appVersion();
+        int currentVersion = getAppVersion();
+        if (registeredVersion != currentVersion)
+        {
+            Log.i("GcmActivity", "|App version changed.|");
+            return "";
+        }
+        return registrationId;
+    }
+
+    // app version을 가져온다. 뭐에 쓰는건지는 모르겠다.
+    private int getAppVersion()
+    {
+        try
+        {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            return packageInfo.versionCode;
+        }
+        catch (PackageManager.NameNotFoundException e)
+        {
+            // should never happen
+            throw new RuntimeException("Could not get package name: " + e);
+        }
+    }
+
+    // gcm 서버에 접속해서 registration id를 발급받는다.
+    private void registerInBackground()
+    {
+        new AsyncTask<Void, Void, String>()
+        {
+            @Override
+            protected String doInBackground(Void... params)
+            {
+                String msg = "";
+                try
+                {
+                    if (_gcm == null)
+                    {
+                        _gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+                    }
+                    _regId = _gcm.register(SENDER_ID);
+                    msg = "Device registered, registration ID=" + _regId;
+
+                    // For this demo: we don't need to send it because the device
+                    // will send upstream messages to a server that echo back the
+                    // message using the 'from' address in the message.
+
+                    // Persist the regID - no need to register again.
+                    storeRegistrationId(_regId);
+                }
+                catch (IOException ex)
+                {
+                    msg = "Error :" + ex.getMessage();
+                    // If there is an error, don't just keep trying to register.
+                    // Require the user to click a button again, or perform
+                    // exponential back-off.
+                }
+
+                update_regid();
+
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg)
+            {
+                Log.i("GcmActivity", "|" + msg + "|");
+            }
+        }.execute(null, null, null);
+    }
+
+    // registraion id를 preference에 저장한다.
+    private void storeRegistrationId(String regId)
+    {
+        int appVersion = getAppVersion();
+        Log.i("GcmActivity", "|" + "Saving regId on app version " + appVersion + "|");
+        PreferenceUtil.instance(getApplicationContext()).putRedId(regId);
+        PreferenceUtil.instance(getApplicationContext()).putAppVersion(appVersion);
+    }
+
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString("message");
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
+
+            /**
+             * Take appropriate action on this message
+             * depending upon your app requirement
+             * For now i am just displaying it on the screen
+             * */
+
+            // Showing received message
+            Toast.makeText(getApplicationContext(), "New Message: " + newMessage, Toast.LENGTH_LONG).show();
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
 }

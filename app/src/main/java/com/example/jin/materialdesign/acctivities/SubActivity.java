@@ -11,17 +11,28 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.jin.materialdesign.R;
 import com.example.jin.materialdesign.acctivities.auth.LoginActivity;
 import com.example.jin.materialdesign.acctivities.auth.UserInfoManageActivity;
 import com.example.jin.materialdesign.fragments.AddTaskMapFragment;
 import com.example.jin.materialdesign.fragments.MyTaskListFragment;
 import com.example.jin.materialdesign.fragments.NavigationDrawerFragment;
+import com.example.jin.materialdesign.network.VolleySingleton;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -32,7 +43,8 @@ public class SubActivity extends ActionBarActivity implements MaterialTabListene
 
     private ViewPager mPager;
     private MaterialTabHost tabHost;
-    private Intent intent;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
 
     @Override
     public void finish() {
@@ -46,6 +58,9 @@ public class SubActivity extends ActionBarActivity implements MaterialTabListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub);
+
+        pref = getSharedPreferences("pref", MODE_PRIVATE);
+        editor = pref.edit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
@@ -114,9 +129,9 @@ public class SubActivity extends ActionBarActivity implements MaterialTabListene
         public Fragment getItem(int position) {
 
             if (position == 0) {
-                return new AddTaskMapFragment().getInstance();
-            } else {
                 return new MyTaskListFragment().getInstance();
+            } else {
+                return new AddTaskMapFragment().getInstance();
             }
 
         }
@@ -181,14 +196,7 @@ public class SubActivity extends ActionBarActivity implements MaterialTabListene
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.logout) {
-            SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putString("username", "");
-            editor.putBoolean("is_logged_in", false);
-            editor.commit();
-
-            finish();
-            Toast.makeText(this, "로그아웃", Toast.LENGTH_SHORT).show();
+            update_regid();
             return true;
         }
 
@@ -209,5 +217,48 @@ public class SubActivity extends ActionBarActivity implements MaterialTabListene
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void update_regid() {
+        RequestQueue requestQueue = VolleySingleton.getsInstance().getRequestQueue();
+        String url = "http://feering.zc.bz/php/gcm/update_regid.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                editor.putString("username", "");
+                editor.putBoolean("is_logged_in", false);
+                editor.commit();
+                Toast.makeText(SubActivity.this, "로그아웃", Toast.LENGTH_SHORT).show();
+                finish();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(SubActivity.this, "서버와 통신할수 없습니다. 정상적으로 로그아웃되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                finish();
+                Log.d("MYTAG", error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("name", pref.getString("username", ""));
+                params.put("gcm_regid", "");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/x-www-form-urlencoded");
+                headers.put("abc", "value");
+                return headers;
+            }
+        };
+
+        requestQueue.add(request);
     }
 }

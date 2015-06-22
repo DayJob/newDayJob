@@ -3,6 +3,17 @@
     package="com.example.jin.materialdesign" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <permission
+        android:name="com.example.jin.materialdesign.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.example.jin.materialdesign.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -85,6 +96,28 @@
         <activity
             android:name=".acctivities.auth.UserInfoManageActivity"
             android:label="@string/title_activity_user_info_manage" >
+        </activity>
+
+        <receiver
+            android:name=".push.GcmBroadcastReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <!-- Receives the registration id. -->
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.example.jin.materialdesign" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".push.GcmIntentService" />
+
+        <activity
+            android:name=".push.GcmActivity"
+            android:label="@string/title_activity_gcm" >
         </activity>
     </application>
 

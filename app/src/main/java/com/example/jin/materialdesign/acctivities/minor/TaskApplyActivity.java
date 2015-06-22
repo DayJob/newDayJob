@@ -216,11 +216,12 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
 
     public void sendApplyData() {
         RequestQueue requestQueue = VolleySingleton.getsInstance().getRequestQueue();
-        String url = "http://feering.zc.bz/php/insertToTaskApply.php";
+        String url = "http://feering.zc.bz/php/apply/insertToTaskApply.php";
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
+                Log.d("MYTAG", response);
                 Toast.makeText(TaskApplyActivity.this, "신청하였습니다.", Toast.LENGTH_SHORT).show();
                 apply.setVisibility(View.GONE);
                 cancel.setVisibility(View.VISIBLE);
