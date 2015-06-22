@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class LoginActivity extends ActionBarActivity {
 
     private String username, password, message;
     private EditText et1, et2;
+    private Button login;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
@@ -83,6 +85,7 @@ public class LoginActivity extends ActionBarActivity {
 
         et1 = (EditText) findViewById(R.id.username);
         et2 = (EditText) findViewById(R.id.password);
+        login = (Button) findViewById(R.id.login);
 
         et1.setText(pref.getString("username", ""));
     }
@@ -98,6 +101,7 @@ public class LoginActivity extends ActionBarActivity {
                     Toast.makeText(this, "양식을 모두 채워주세요", Toast.LENGTH_SHORT).show();
 
                 } else {
+                    login.setEnabled(false);
                     getLoginData();
                 }
 
