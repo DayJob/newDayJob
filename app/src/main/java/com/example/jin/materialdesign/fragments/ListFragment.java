@@ -45,14 +45,14 @@ import java.util.Map;
 /**
  * Created by Jin on 2015-06-05.
  */
-public class ListFragment extends Fragment implements MyBidListAdapter.ClickListener{
+public class ListFragment extends Fragment implements MyBidListAdapter.ClickListener {
 
     private RecyclerView recyclerView;
     private MyBidListAdapter adapter;
     private ArrayList<Task> data;
     public static final String DRAWABLES_PATH = ":drawable/";
     private int counter = 0;
-    private static final int LIMIT = 5;
+    private static final int LIMIT = 10;
     LinearLayoutManager linearLayoutManager;
     private SwipyRefreshLayout swipyRefreshLayout;
     private boolean is_last_data = false;
@@ -81,6 +81,11 @@ public class ListFragment extends Fragment implements MyBidListAdapter.ClickList
         swipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection swipyRefreshLayoutDirection) {
+                if (swipyRefreshLayoutDirection == SwipyRefreshLayoutDirection.TOP) {
+                    data.clear();
+                    adapter.setTaskList(data);
+                    counter = 0;
+                }
 
                 if (is_last_data) {
                     Toast.makeText(getActivity(), "마지막 데이터 입니다.", Toast.LENGTH_SHORT).show();
@@ -91,12 +96,12 @@ public class ListFragment extends Fragment implements MyBidListAdapter.ClickList
                 if (swipyRefreshLayout.isRefreshing()) {
                     swipyRefreshLayout.setRefreshing(false);
                 }
+
             }
         });
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.taskList);
         adapter = new MyBidListAdapter(getActivity());
-        adapter.setTaskList(data);
         setDataByCategory();
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
@@ -217,7 +222,7 @@ public class ListFragment extends Fragment implements MyBidListAdapter.ClickList
 
         if (filter.equals("거리순")) {
             url = "http://feering.zc.bz/php/selectOrderByDistance.php";
-        } else if (filter.equals("최신순")){
+        } else if (filter.equals("최신순")) {
             url = "http://feering.zc.bz/php/selectOrderByDatetime.php";
         } else {
             url = "http://feering.zc.bz/php/selectOrderByPay.php";
@@ -244,7 +249,7 @@ public class ListFragment extends Fragment implements MyBidListAdapter.ClickList
                                                 + task.getString("image_name"),
                                         null, null), Double.valueOf(task
                                 .getString("latitude")), Double
-                                .valueOf(task.getString("longitude")),task.getString("username") ,task.getString("create_at")));
+                                .valueOf(task.getString("longitude")), task.getString("username"), task.getString("create_at")));
 
                     }
 
@@ -272,7 +277,7 @@ public class ListFragment extends Fragment implements MyBidListAdapter.ClickList
                 params.put("offset", counter + "");
                 params.put("limit", LIMIT + "");
                 params.put("latitude", pref.getString("latitude", "0"));
-                params.put("longitude", pref.getString("longitude", "0") );
+                params.put("longitude", pref.getString("longitude", "0"));
 
                 return params;
             }

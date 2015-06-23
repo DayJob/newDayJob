@@ -168,16 +168,17 @@ public class AddTaskActivity extends ActionBarActivity {
         try {
 
             addr = mCoder.getFromLocation(Double.valueOf(intent.getStringExtra("latitude")), Double.valueOf(intent.getStringExtra("longitude")), 5);
+            locationText.setText(addr.get(0).getAddressLine(0));
 
         } catch (NumberFormatException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            locationText.setText("알수없음");
             e.printStackTrace();
         }
 
-        locationText.setText(addr.get(0).getAddressLine(0));
+
 
         phoneText.setText(pref.getString("phone", ""));
         phoneText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -270,8 +271,7 @@ public class AddTaskActivity extends ActionBarActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(AddTaskActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("MYTAG", error.getMessage());
+                Toast.makeText(AddTaskActivity.this, "서버와 통신할 수 없습니다. 인터넷 연결상태를 확인하세요", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override

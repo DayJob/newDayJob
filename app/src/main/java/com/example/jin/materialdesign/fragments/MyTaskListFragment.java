@@ -50,6 +50,7 @@ public class MyTaskListFragment extends Fragment implements MyTaskListAdapter.Cl
     private MyTaskListFragment myTaskListFragment;
     private SwipyRefreshLayout swipyRefreshLayout;
     private LinearLayoutManager linearLayoutManager;
+    private boolean is_last_data = false;
     private JSONArray ja;
     private AddTaskActivity addTaskActivity;
 
@@ -73,9 +74,11 @@ public class MyTaskListFragment extends Fragment implements MyTaskListAdapter.Cl
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection swipyRefreshLayoutDirection) {
                 setData();
-                if (ja.length() == 0) {
-                    Toast.makeText(getActivity(), "마지막 데이터 입니다.", Toast.LENGTH_SHORT).show();
+
+                if (swipyRefreshLayout.isRefreshing()) {
+                    swipyRefreshLayout.setRefreshing(false);
                 }
+
             }
         });
 
@@ -122,9 +125,6 @@ public class MyTaskListFragment extends Fragment implements MyTaskListAdapter.Cl
 
                     adapter.setTaskList(data);
 
-                    if (swipyRefreshLayout.isRefreshing()) {
-                        swipyRefreshLayout.setRefreshing(false);
-                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

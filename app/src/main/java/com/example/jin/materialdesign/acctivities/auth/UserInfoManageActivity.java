@@ -185,8 +185,7 @@ public class UserInfoManageActivity extends ActionBarActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(UserInfoManageActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("MYTAG", error.getMessage());
+                Toast.makeText(UserInfoManageActivity.this, "서버와 통신할 수 없습니다. 인터넷 연결상태를 확인하세요", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override

@@ -254,7 +254,6 @@ public class SignupActivity extends ActionBarActivity {
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(SignupActivity.this, "서버와 통신할수 없습니다. 인터넷 연결상태를 확인해주세요.", Toast.LENGTH_SHORT).show();
                 finish();
-                Log.d("MYTAG", error.getMessage());
             }
         }) {
             @Override
@@ -303,7 +302,6 @@ public class SignupActivity extends ActionBarActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(SignupActivity.this, "서버와 통신할수 없습니다. 인터넷 연결상태를 확인해주세요.", Toast.LENGTH_SHORT).show();
-                Log.d("MYTAG", error.getMessage());
                 finish();
             }
         }) {
