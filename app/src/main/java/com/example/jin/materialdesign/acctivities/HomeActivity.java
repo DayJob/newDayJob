@@ -213,7 +213,6 @@ public class HomeActivity extends ActionBarActivity {
                         addr.get(0).getAddressLine(0));
             } catch (IOException e) {
                 e.printStackTrace();
-                editor.putBoolean("is_logged_in", false);
                 Toast.makeText(this, "접속 대기시간 초과, 인터넷 연결상태를 확인해주세요.", Toast.LENGTH_LONG).show();
             }
 
@@ -377,7 +376,6 @@ public class HomeActivity extends ActionBarActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(HomeActivity.this, "서버와 통신할수 없습니다. 정상적으로 로그아웃되지 않았습니다.", Toast.LENGTH_SHORT).show();
-                finish();
                 Log.d("MYTAG", error.getMessage());
             }
         }) {
