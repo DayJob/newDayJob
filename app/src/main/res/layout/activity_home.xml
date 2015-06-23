@@ -10,71 +10,78 @@
         layout="@layout/app_bar" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primary"
         android:layout_weight="1.25"
-        android:gravity="bottom|center_horizontal">
+        android:background="@color/primary"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Day Job"
-            android:textSize="50dp"
-            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/icons"
-            android:id="@+id/textView" />
+            android:textSize="50dp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/icons"
         android:layout_weight="1"
-        android:gravity="center">
+        android:background="@color/icons"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <Button
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary_dark"
+            android:orientation="horizontal"
             android:layout_marginBottom="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="시작하기"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:textColor="@color/icons"
-            android:background="@color/primary"
-            android:onClick="mOnClick"
-            android:id="@+id/button" />
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp">
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/home_background"
+                android:onClick="mOnClick"
+                android:text="시작하기"
+                android:textColor="@color/icons"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <Button
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
+            android:id="@+id/button2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:background="@color/primary"
+            android:onClick="mOnClick"
             android:text="구인메뉴"
-            android:textSize="16dp"
-            android:textStyle="bold"
             android:textColor="@color/icons"
-            android:background="@color/primary"
-            android:onClick="mOnClick"
-            android:id="@+id/button2" />
+            android:textSize="16dp"
+            android:textStyle="bold" />
 
         <Button
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
+            android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="로그인"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:textColor="@color/icons"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:background="@color/primary"
             android:onClick="mOnClick"
-            android:id="@+id/login" />
+            android:text="로그인"
+            android:textColor="@color/icons"
+            android:textSize="16dp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 </LinearLayout>

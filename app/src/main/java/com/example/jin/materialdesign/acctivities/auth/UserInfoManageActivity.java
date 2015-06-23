@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class UserInfoManageActivity extends ActionBarActivity {
 
     private String phone, address, sex, birth;
     private EditText addressText, phoneText, sexText, birthText;
+    private Button modify;
     private SharedPreferences pref;
     private Calendar myCalendar;
     int y, m, d;
@@ -61,6 +63,7 @@ public class UserInfoManageActivity extends ActionBarActivity {
 
         pref = getSharedPreferences("pref", MODE_PRIVATE);
 
+        modify = (Button) findViewById(R.id.modify);
         phoneText = (EditText) findViewById(R.id.phone);
         addressText = (EditText) findViewById(R.id.address);
         sexText = (EditText) findViewById(R.id.sex);
@@ -153,6 +156,7 @@ public class UserInfoManageActivity extends ActionBarActivity {
                 if (address.equals("") || phone.equals("") || sex.equals("") || birth.equals("")) {
                     Toast.makeText(this, "양식을 모두 채워주세요", Toast.LENGTH_SHORT).show();
                 } else {
+                    modify.setEnabled(false);
                     sendAuthData();
                 }
                 break;

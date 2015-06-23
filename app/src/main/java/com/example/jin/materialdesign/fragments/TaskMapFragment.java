@@ -111,7 +111,7 @@ public class TaskMapFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("MYTAG", error.getMessage());
+                Toast.makeText(getActivity(), "인터넷 연결문제", Toast.LENGTH_SHORT).show();
             }
         });
 

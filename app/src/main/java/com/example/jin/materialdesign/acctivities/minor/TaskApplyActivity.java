@@ -226,6 +226,7 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
                 apply.setVisibility(View.GONE);
                 cancel.setVisibility(View.VISIBLE);
                 setData();
+                apply.setEnabled(true);
 
             }
         }, new Response.ErrorListener() {
@@ -233,6 +234,7 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(TaskApplyActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("MYTAG", error.getMessage());
+                apply.setEnabled(true);
             }
         }) {
             @Override
@@ -260,12 +262,14 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
                 apply.setVisibility(View.VISIBLE);
                 cancel.setVisibility(View.GONE);
                 adapter.removeItem(myApplyId);
+                cancel.setEnabled(true);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(TaskApplyActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("MYTAG", error.getMessage());
+                cancel.setEnabled(true);
             }
         }) {
             @Override
@@ -312,12 +316,16 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
 
                 break;
             case R.id.apply:
+                apply.setEnabled(false);
                 sendApplyData();
+
                 Toast.makeText(this, "신청되었습니다.", Toast.LENGTH_SHORT).show();
 
                 break;
             case R.id.cancel:
+                cancel.setEnabled(false);
                 deleteApplyData();
+
                 Toast.makeText(this, "취소되었습니다.", Toast.LENGTH_SHORT).show();
 
                 break;

@@ -97,7 +97,7 @@ public class HomeActivity extends ActionBarActivity {
     public void mOnClick(View v) {
         switch (v.getId()) {
             case R.id.button:
-
+                btn1.setEnabled(false);
                 if(pref.getBoolean("is_logged_in", false)){
                     Intent main = new Intent(this, MainActivity.class);
                     main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -106,6 +106,7 @@ public class HomeActivity extends ActionBarActivity {
                 } else {
                     Toast.makeText(this, "로그인을 먼저 해주세요..", Toast.LENGTH_LONG).show();
                 }
+                btn1.setEnabled(true);
 
                 break;
             case R.id.button2:

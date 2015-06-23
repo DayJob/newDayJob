@@ -46,6 +46,7 @@ public class AddTaskActivity extends ActionBarActivity {
 
     private Intent intent;
     private EditText locationText, dateText, timeText, phoneText, categoryButton;
+    private Button btn;
     String username, pay, description, location, date, time, phone, category, latitude, longitude, image_name;
     private Geocoder mCoder;
     private List<Address> addr;
@@ -83,11 +84,10 @@ public class AddTaskActivity extends ActionBarActivity {
         latitude = intent.getStringExtra("latitude");
         longitude = intent.getStringExtra("longitude");
 
+        btn = (Button) findViewById(R.id.button2);
+
         locationText = (EditText) findViewById(R.id.editText3);
-
         phoneText = (EditText) findViewById(R.id.editText5);
-
-
         dateText = (EditText) findViewById(R.id.date);
         timeText = (EditText) findViewById(R.id.time);
         categoryButton = (EditText) findViewById(R.id.category);
@@ -246,7 +246,7 @@ public class AddTaskActivity extends ActionBarActivity {
                     Toast.makeText(this, "양식을 모두 채워주세요", Toast.LENGTH_SHORT).show();
 
                 } else {
-
+                    btn.setEnabled(false);
                     sendTaskData();
                     Toast.makeText(this, "등록했습니다. 내게시물 탭에서 확인해보세요.",
                             Toast.LENGTH_SHORT).show();
