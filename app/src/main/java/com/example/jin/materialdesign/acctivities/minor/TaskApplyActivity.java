@@ -199,8 +199,7 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TaskApplyActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("MYTAG", error.getMessage());
+                Toast.makeText(TaskApplyActivity.this, "서버와 통신할 수 없습니다. 인터넷 연결상태를 확인하세요", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
@@ -232,8 +231,7 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TaskApplyActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("MYTAG", error.getMessage());
+                Toast.makeText(TaskApplyActivity.this, "서버와 통신할 수 없습니다. 인터넷 연결상태를 확인하세요", Toast.LENGTH_LONG).show();
                 apply.setEnabled(true);
             }
         }) {
@@ -267,8 +265,7 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TaskApplyActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("MYTAG", error.getMessage());
+                Toast.makeText(TaskApplyActivity.this, "서버와 통신할 수 없습니다. 인터넷 연결상태를 확인하세요", Toast.LENGTH_LONG).show();
                 cancel.setEnabled(true);
             }
         }) {

@@ -134,7 +134,7 @@ public class MyTaskListFragment extends Fragment implements MyTaskListAdapter.Cl
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("MYTAG", error.getMessage());
+                Toast.makeText(getActivity(), "서버와 통신할 수 없습니다. 인터넷 연결상태를 확인하세요", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
