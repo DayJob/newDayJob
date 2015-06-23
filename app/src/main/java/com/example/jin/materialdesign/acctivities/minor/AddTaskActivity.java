@@ -95,7 +95,7 @@ public class AddTaskActivity extends ActionBarActivity {
         dateText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     new DatePickerDialog(AddTaskActivity.this, datePicker, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                             myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -106,7 +106,7 @@ public class AddTaskActivity extends ActionBarActivity {
         timeText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     new TimePickerDialog(AddTaskActivity.this, timePicker, myCalendar
                             .get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), false).show();
                 }
@@ -174,10 +174,10 @@ public class AddTaskActivity extends ActionBarActivity {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            locationText.setText("알수없음");
+            Toast.makeText(AddTaskActivity.this, "서버와 통신할 수 없습니다. 인터넷 연결상태를 확인하세요", Toast.LENGTH_LONG).show();
+            finish();
             e.printStackTrace();
         }
-
 
 
         phoneText.setText(pref.getString("phone", ""));
@@ -249,9 +249,6 @@ public class AddTaskActivity extends ActionBarActivity {
                 } else {
                     btn.setEnabled(false);
                     sendTaskData();
-                    Toast.makeText(this, "등록했습니다. 내게시물 탭에서 확인해보세요.",
-                            Toast.LENGTH_SHORT).show();
-                    finish();
                 }
 
                 break;
@@ -267,11 +264,15 @@ public class AddTaskActivity extends ActionBarActivity {
             public void onResponse(String response) {
 
                 clickListener.listUpdate();
+                Toast.makeText(AddTaskActivity.this, "등록했습니다. 내게시물 탭에서 확인해보세요.",
+                        Toast.LENGTH_SHORT).show();
+                finish();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(AddTaskActivity.this, "서버와 통신할 수 없습니다. 인터넷 연결상태를 확인하세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddTaskActivity.this, "서버와 통신할 수 없습니다. 인터넷 연결상태를 확인하세요", Toast.LENGTH_LONG).show();
+                finish();
             }
         }) {
             @Override

@@ -225,7 +225,7 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
                 cancel.setVisibility(View.VISIBLE);
                 setData();
                 apply.setEnabled(true);
-
+                clickListener.listUpdate();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -260,6 +260,7 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
                 cancel.setVisibility(View.GONE);
                 adapter.removeItem(myApplyId);
                 cancel.setEnabled(true);
+                clickListener.listUpdate();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -314,14 +315,11 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
             case R.id.apply:
                 apply.setEnabled(false);
                 sendApplyData();
-                Toast.makeText(this, "신청되었습니다.", Toast.LENGTH_SHORT).show();
-                clickListener.listUpdate();
+
                 break;
             case R.id.cancel:
                 cancel.setEnabled(false);
                 deleteApplyData();
-                Toast.makeText(this, "취소되었습니다.", Toast.LENGTH_SHORT).show();
-                clickListener.listUpdate();
                 break;
         }
     }
