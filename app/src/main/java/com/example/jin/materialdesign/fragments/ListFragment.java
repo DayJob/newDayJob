@@ -55,7 +55,6 @@ public class ListFragment extends Fragment implements MyBidListAdapter.ClickList
     private static final int LIMIT = 10;
     LinearLayoutManager linearLayoutManager;
     private SwipyRefreshLayout swipyRefreshLayout;
-    private boolean is_last_data = false;
     private View layout;
     private Button button1, button2;
     private String category = "전체보기";
@@ -87,11 +86,7 @@ public class ListFragment extends Fragment implements MyBidListAdapter.ClickList
                     counter = 0;
                 }
 
-                if (is_last_data) {
-                    Toast.makeText(getActivity(), "마지막 데이터 입니다.", Toast.LENGTH_SHORT).show();
-                } else {
                     setDataByCategory();
-                }
 
                 if (swipyRefreshLayout.isRefreshing()) {
                     swipyRefreshLayout.setRefreshing(false);
@@ -235,7 +230,6 @@ public class ListFragment extends Fragment implements MyBidListAdapter.ClickList
 
                 try {
                     JSONArray ja = new JSONArray(response);
-                    is_last_data = ja.length() == 0;
                     for (int i = 0; i < ja.length(); i++) {
 
                         JSONObject task = ja.getJSONObject(i);
@@ -255,7 +249,7 @@ public class ListFragment extends Fragment implements MyBidListAdapter.ClickList
 
                     counter = adapter.getItemCount();
 
-                    if (is_last_data) {
+                    if (ja.length() == 0) {
                         Toast.makeText(getActivity(), "마지막 데이터 입니다.", Toast.LENGTH_SHORT).show();
                     }
 

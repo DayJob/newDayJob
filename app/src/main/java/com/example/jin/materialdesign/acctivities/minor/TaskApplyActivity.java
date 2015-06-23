@@ -65,7 +65,6 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
     @Override
     public void finish() {
         super.finish();
-        clickListener.listUpdate();
         overridePendingTransition(R.anim.hold, R.anim.slide_out_left);
     }
 
@@ -315,16 +314,14 @@ public class TaskApplyActivity extends ActionBarActivity implements UserListAdap
             case R.id.apply:
                 apply.setEnabled(false);
                 sendApplyData();
-
                 Toast.makeText(this, "신청되었습니다.", Toast.LENGTH_SHORT).show();
-
+                clickListener.listUpdate();
                 break;
             case R.id.cancel:
                 cancel.setEnabled(false);
                 deleteApplyData();
-
                 Toast.makeText(this, "취소되었습니다.", Toast.LENGTH_SHORT).show();
-
+                clickListener.listUpdate();
                 break;
         }
     }

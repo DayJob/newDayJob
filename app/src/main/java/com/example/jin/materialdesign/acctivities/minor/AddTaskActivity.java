@@ -251,7 +251,6 @@ public class AddTaskActivity extends ActionBarActivity {
                     sendTaskData();
                     Toast.makeText(this, "등록했습니다. 내게시물 탭에서 확인해보세요.",
                             Toast.LENGTH_SHORT).show();
-                    clickListener.listUpdate();
                     finish();
                 }
 
@@ -267,6 +266,7 @@ public class AddTaskActivity extends ActionBarActivity {
             @Override
             public void onResponse(String response) {
 
+                clickListener.listUpdate();
             }
         }, new Response.ErrorListener() {
             @Override
