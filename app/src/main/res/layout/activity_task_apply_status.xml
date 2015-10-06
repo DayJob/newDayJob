@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/icons"
-    tools:context="com.example.jin.materialdesign.acctivities.minor.TaskApplyStatusActivity">
+    tools:context="com.jin.dayjob.acctivities.minor.TaskApplyStatusActivity">
 
     <include
         android:id="@+id/app_bar"

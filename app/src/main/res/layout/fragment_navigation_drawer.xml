@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary_dark"
-    tools:context="com.example.jin.materialdesign.fragments.NavigationDrawerFragment">
+    tools:context="com.jin.dayjob.fragments.NavigationDrawerFragment">
 
     <LinearLayout
         android:id="@+id/containerDrawerImage"

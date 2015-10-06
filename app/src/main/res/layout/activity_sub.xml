@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:context="com.example.jin.materialdesign.acctivities.SubActivity">
+            tools:context="com.jin.dayjob.acctivities.SubActivity">
 
             <it.neokree.materialtabs.MaterialTabHost
                 android:id="@+id/subTabHost"
@@ -41,7 +41,7 @@
 
         <fragment
             android:id="@+id/fragment_navigation_drawer"
-            android:name="com.example.jin.materialdesign.fragments.NavigationDrawerFragment"
+            android:name="com.jin.dayjob.fragments.NavigationDrawerFragment"
             android:layout_width="@dimen/nav_drawer_width"
             android:layout_height="match_parent"
             android:layout_gravity="start"

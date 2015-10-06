@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/icons"
     android:orientation="vertical"
-    tools:context="com.example.jin.materialdesign.acctivities.auth.SignupActivity">
+    tools:context="com.jin.dayjob.acctivities.auth.SignupActivity">
 
     <include
         android:id="@+id/app_bar"

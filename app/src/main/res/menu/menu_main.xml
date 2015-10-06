@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.jin.materialdesign.acctivities.MainActivity">
+    tools:context="com.jin.dayjob.acctivities.MainActivity">
 
     <item android:id="@+id/username"
         android:title=""
