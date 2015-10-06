@@ -17,7 +17,7 @@ public final class CommonUtilities {
     static final String TAG = "AndroidHive GCM";
 
     static final String DISPLAY_MESSAGE_ACTION =
-            "com.example.jin.materialdesign.push.DISPLAY_MESSAGE";
+            "com.jin.dayjob.push.DISPLAY_MESSAGE";
 
     static final String EXTRA_MESSAGE = "message";
 

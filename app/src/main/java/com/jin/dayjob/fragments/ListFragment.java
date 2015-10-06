@@ -234,7 +234,7 @@ public class ListFragment extends Fragment implements MyBidListAdapter.ClickList
                                 task.getString("phone"),
                                 task.getString("category"),
                                 getResources().getIdentifier(
-                                        "com.example.jin.materialdesign" + DRAWABLES_PATH
+                                        "com.jin.dayjob" + DRAWABLES_PATH
                                                 + task.getString("image_name"),
                                         null, null), Double.valueOf(task
                                 .getString("latitude")), Double
